@@ -1,0 +1,13 @@
+version: '3'
+
+services: 
+
+  hermod:
+    image: openjdk:14
+    restart: on-failure
+    container_name: hermod
+    ports:
+      - 8800:8800
+    volumes:
+      - app.jar:/application.jar
+    command: ["/usr/bin/java", "-jar", "application.jar"]

@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  api:
+    build: .
+    container_name: app_laravel
+    ports:
+      - 8001:80
+    volumes:
+      - ./app-laravel:/var/www/html
+      - /etc/localtime:/etc/localtime:ro
+    networks: 
+      - back-end
+    restart: on-failure
+    command: bash -c "cd /app-laravel && composer i && php artisan serve"
+    
+networks:
+    back-end:
+      driver: bridge

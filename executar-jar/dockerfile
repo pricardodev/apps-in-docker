@@ -1,0 +1,7 @@
+FROM openjdk:14
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN javac Main.java
+CMD ["java", "Main"]
+VOLUME [ "$PWD":/usr/src/myapp ]
+EXPOSE "8089"
