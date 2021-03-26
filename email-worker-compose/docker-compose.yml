@@ -1,8 +1,38 @@
 version: '3'
+volumes: 
+  dados:
 services: 
   db:
     image: postgres:9.6
+    container_name: banco_dados
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: dev
     volumes:
+      # volume dos dados
       - dados:/var/lib/postgresql/data
+      # scipts
       - ./scripts:/scripts
+      # cria e se conecta com banco - Baseado na documentação
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+  frontend:
+    image: nginx:latest
+    container_name: servidor_web
+    volumes: 
+      # site
+      - ./web:/usr/share/nginx/html
+      # config do proxy reverso 
+      - ./nginx/default.config:/etc/nginx/config.d/default.config     
+    ports: 
+      - '80:80'
+  app:
+    image: python:3.6 
+    container_name: app_python
+    volumes: 
+      # Aplicação
+      - ./app:/app
+    working_dir: /app
+    command: bash ./app.sh
+    # Usando o prooxy reverso não precisa acessara porta diretamente
+    #ports: 
+    #  - '8080:8080'
