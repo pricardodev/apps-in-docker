@@ -22,7 +22,7 @@ services:
       # site
       - ./web:/usr/share/nginx/html
       # config do proxy reverso 
-      - ./nginx/default.config:/etc/nginx/config.d/default.config     
+      - ./nginx/default.conf:/etc/nginx/config.d/default.conf     
     ports: 
       - '80:80'
   app:
