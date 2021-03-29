@@ -1,0 +1,32 @@
+version: '3.7'
+services: 
+  postgres9:
+    image: postgres:9.6
+    container_name: postgres_9
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev
+    volumes: 
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - app-network
+  
+  backend:
+    image: php:7.4-apache
+    container_name: php_7_apache
+    restart: unless-stopped # A não ser que o container pare, restart nas falhas
+    networks: 
+      - app-network
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html
+    #  - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini // Caso tenha alterações especificas nos arquivos de configurações do php
+    #  - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge   

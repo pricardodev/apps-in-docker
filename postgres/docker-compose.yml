@@ -1,0 +1,34 @@
+version: '3.7'
+services: 
+  postgres9:
+    image: postgres:9.6
+    container_name: postgres_9
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev
+    volumes: 
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5434:5434 # Quando já estiver serviço usando usando a porta padrão 5332
+    networks:
+      - postgres_network
+  
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: pgadmin_4
+    restart: unless-stopped # A não ser que o container pare, restart nas falhas
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dev@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: dev
+    volumes:
+      - ./app:/var/www/html
+    ports: 
+      - 15432:80
+    networks: 
+      - postgres_network
+    
+#Docker Networks
+networks:
+  postgres_network:
+    driver: bridge   
